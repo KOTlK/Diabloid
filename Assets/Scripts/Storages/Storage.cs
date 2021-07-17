@@ -14,22 +14,63 @@ namespace Game.Storages
         {
             _objects = objects;
             _components = new List<T>();
-            foreach (Transform obj in _objects)
+            if (_objects.Length > 0)
             {
-                _components.Add(obj.GetComponent<T>());
+                foreach (Transform obj in _objects)
+                {
+                    _components.Add(obj.GetComponent<T>());
+                }
             }
+            
         }
 
         public T GetItemByName(string name)
         {
-            foreach(T component in _components)
+            if (_components.Count > 0)
             {
-                if (component.name == name)
+                foreach (T component in _components)
                 {
-                    return component;
+                    if (component.name == name)
+                    {
+                        return component;
+                    }
                 }
             }
             return null;
+        }
+
+        public T GetItemByIndex(int index)
+        {
+            if (_components.Count > 0)
+            {
+                return _components[index];
+            } else
+            {
+                return null;
+            }
+        }
+
+        public T GetFirstItem()
+        {
+            if (_components.Count > 0)
+            {
+                return _components[0];
+            }else
+            {
+                return null;
+            }
+        }
+
+        public T GetLastItem()
+        {
+            if (_components.Count > 0)
+            {
+                return _components[-1];
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }
