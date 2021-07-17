@@ -8,6 +8,7 @@ namespace Game.PlayerInput
         public Vector2 Movement { get; private set; }
         public float MouseScrollDelta { get; private set; }
         public bool ShiftHolding { get; private set; }
+        public Vector3 MousePosition { get; private set; }
 
 
         public void UpdateInput()
@@ -15,6 +16,7 @@ namespace Game.PlayerInput
             Movement = UpdateMovement();
             MouseScrollDelta = ReadMouseWheel();
             ShiftHolding = ReadShiftButton();
+            MousePosition = ReadMousePosition();
         }
         private Vector3 UpdateMovement()
         {
@@ -32,6 +34,11 @@ namespace Game.PlayerInput
         private bool ReadShiftButton()
         {
             return Input.GetKey(KeyCode.LeftShift);
+        }
+
+        private Vector3 ReadMousePosition()
+        {
+            return Input.mousePosition;
         }
     }
 }
