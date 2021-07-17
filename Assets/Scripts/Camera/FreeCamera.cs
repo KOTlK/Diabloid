@@ -15,6 +15,8 @@ public class FreeCamera : MonoBehaviour
     private const float _fastSpeed = 80;
     private Vector3 _targetVelocity;
 
+    private readonly Vector2 _maxDistanceToBorders = new Vector2(10, 10);
+
     private Camera _camera;
     private Rigidbody _cameraRigidbody;
 
@@ -43,8 +45,28 @@ public class FreeCamera : MonoBehaviour
     {
         MoveCamera();
         SpeedUp();
+        MoveCameraOnMouse(_input.MousePosition);
 
+    }
+    private void MoveCameraOnMouse(Vector3 mousePosition)
+    {
+        if (mousePosition.x <= _maxDistanceToBorders.x)
+        {
+            _targetVelocity.x = -_speed;
+        } else if (mousePosition.x >= Screen.width - _maxDistanceToBorders.x)
+        {
+            _targetVelocity.x = _speed;
+        }
 
+        if (mousePosition.y <= _maxDistanceToBorders.y)
+        {
+            _targetVelocity.z = -_speed;
+        } else if (mousePosition.y >= Screen.height - _maxDistanceToBorders.y)
+        {
+            _targetVelocity.z = _speed;
+        }
+
+        _cameraRigidbody.velocity = _targetVelocity;
     }
 
     private void MoveCamera()
