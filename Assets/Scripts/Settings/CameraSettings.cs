@@ -33,27 +33,13 @@ namespace Game.Settings
 
         public static MainSettings Load()
         {
-            if(_settings == null)
-            {
-                _settings = LoadFromJson();
-                return _settings;
-            }
-            return null;
+            return LoadFromJson();
         }
 
         private static void SaveToJson(MainSettings settings)
         {
             string json = JsonUtility.ToJson(settings, true);
-            if (File.Exists(_settingsPath))
-            {
-                File.WriteAllText(_settingsPath, json);
-            } else
-            {
-                var file = File.Create(_settingsPath);
-                file.Close();
-                File.WriteAllText(_settingsPath, json);
-            }
-            
+            File.WriteAllText(_settingsPath, json);
         }
 
         private static MainSettings LoadFromJson()
@@ -61,14 +47,22 @@ namespace Game.Settings
             if (File.Exists(_settingsPath))
             {
                 string json = File.ReadAllText(_settingsPath);
+                Debug.Log(json);
                 return JsonUtility.FromJson<MainSettings>(json);
             } else
             {
-                File.Create(_settingsPath);
-                string json = File.ReadAllText(_settingsPath);
+                string json = JsonUtility.ToJson(GetDefaultSettings(), true);
+                File.WriteAllText(_settingsPath, json);
                 return JsonUtility.FromJson<MainSettings>(json);
             }
 
+        }
+
+        private static MainSettings GetDefaultSettings()
+        {
+            MainSettings temp = new MainSettings();
+            temp.MoveCameraWithMouse = true;
+            return temp;
         }
 
     }

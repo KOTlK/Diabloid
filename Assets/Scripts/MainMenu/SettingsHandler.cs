@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Game.Settings;
@@ -22,6 +20,15 @@ namespace Game.MainMenu
         private void FixedUpdate()
         {
             Debug.Log($"{_settings.MoveCameraWithMouse}, {_toggle.isOn}");
+        }
+        private void OnEnable()
+        {
+            _toggle.onValueChanged.AddListener(delegate { ReverseSettings(); });
+        }
+
+        private void OnDisable()
+        {
+            _toggle.onValueChanged.RemoveAllListeners();
         }
 
         public void ReverseSettings()
