@@ -1,12 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Game.Storages;
 using Game.PlayerInput;
+using Game.Settings;
 
 public class IsometricCamera : MonoBehaviour
 {
-    [SerializeField] LayerMask _layerMask;
+    [SerializeField] private LayerMask _layerMask;
     private float _speed = 40f;
     private const float _rotationAngle = 20f;
     private const float _minCameraSize = 10f;
@@ -23,10 +22,14 @@ public class IsometricCamera : MonoBehaviour
 
     private CameraInput _input;
 
+    private MainSettings _settings = new MainSettings();
+
     private void Awake()
     {
+        _settings = CameraSettings.Load();
         _input = new CameraInput();
     }
+
 
     private void Start()
     {
@@ -46,9 +49,11 @@ public class IsometricCamera : MonoBehaviour
     {
         MoveCamera();
         SpeedUp();
-        MoveCameraOnMouse(_input.MousePosition);
-        
-
+        Debug.Log(_settings.MoveCameraWithMouse);
+        if (_settings.MoveCameraWithMouse)
+        {
+            MoveCameraOnMouse(_input.MousePosition);
+        }
     }
     private void MoveCameraOnMouse(Vector3 mousePosition)
     {
