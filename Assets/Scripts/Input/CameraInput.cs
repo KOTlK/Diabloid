@@ -9,7 +9,6 @@ namespace Game.PlayerInput
         public float MouseScrollDelta { get; private set; }
         public bool ShiftHolding { get; private set; }
         public Vector3 MousePosition { get; private set; }
-        public bool LMBClick { get; private set; }
 
 
         public void UpdateInput()
@@ -18,7 +17,6 @@ namespace Game.PlayerInput
             MouseScrollDelta = ReadMouseWheel();
             ShiftHolding = ReadShiftButton();
             MousePosition = ReadMousePosition();
-            LMBClick = LMBClicked();
         }
         private Vector3 UpdateMovement()
         {
@@ -43,9 +41,5 @@ namespace Game.PlayerInput
             return Input.mousePosition;
         }
 
-        private bool LMBClicked()
-        {
-            return Input.GetMouseButtonDown(0);
-        }
     }
 }

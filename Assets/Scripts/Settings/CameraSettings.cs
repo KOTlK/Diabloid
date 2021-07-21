@@ -47,7 +47,6 @@ namespace Game.Settings
             if (File.Exists(_settingsPath))
             {
                 string json = File.ReadAllText(_settingsPath);
-                Debug.Log(json);
                 return JsonUtility.FromJson<MainSettings>(json);
             } else
             {

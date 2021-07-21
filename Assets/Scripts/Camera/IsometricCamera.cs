@@ -49,7 +49,6 @@ public class IsometricCamera : MonoBehaviour
     {
         MoveCamera();
         SpeedUp();
-        Debug.Log(_settings.MoveCameraWithMouse);
         if (_settings.MoveCameraWithMouse)
         {
             MoveCameraOnMouse(_input.MousePosition);
@@ -100,20 +99,5 @@ public class IsometricCamera : MonoBehaviour
             _speed = _defaultSpeed;
         }
     }
-
-    private Vector3 GetPositionOnClick(Vector3 mousePosition, bool isButtonClicked)
-    {
-        if (isButtonClicked)
-        {
-            RaycastHit hit;
-            Ray ray = _camera.ScreenPointToRay(mousePosition);
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, _layerMask))
-            {
-                return hit.point;
-            }
-        }
-        return Vector3.zero;
-    }
-
     
 }

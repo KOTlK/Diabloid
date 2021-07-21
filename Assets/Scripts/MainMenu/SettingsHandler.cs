@@ -17,10 +17,6 @@ namespace Game.MainMenu
         }
 
 
-        private void FixedUpdate()
-        {
-            Debug.Log($"{_settings.MoveCameraWithMouse}, {_toggle.isOn}");
-        }
         private void OnEnable()
         {
             _toggle.onValueChanged.AddListener(delegate { ReverseSettings(); });
