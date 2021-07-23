@@ -1,15 +1,14 @@
 ﻿using System.Collections;
 using UnityEngine;
-using Game.Characters;
 
 namespace Game.Characters.Spells
 {
-    public class IncreaseStrength : ContinuousSpell
+    public class IncreaseLuck : ContinuousSpell
     {
-        public IncreaseStrength(IStatsProvider wrappedEntity, Character character) : base(wrappedEntity, character)
+        public IncreaseLuck(IStatsProvider wrappedEntity, Character character) : base(wrappedEntity, character)
         {
-            Name = "God Strength";
-            Duration = 10f;
+            Name = "Wish you luck";
+            Duration = 5f;
         }
 
 
@@ -25,23 +24,19 @@ namespace Game.Characters.Spells
             {
                 Target.StopCoroutine(SpellCoroutine);
             }
-
         }
 
         private CharacterStats IncreasedStats()
         {
             return new CharacterStats()
             {
-                Strength = 10,
+                Strength = 0,
                 Dexterity = 0,
                 Endurance = 0,
                 Intelegence = 0,
                 Charisma = 0,
-                Luck = 0
-
+                Luck = 10
             };
         }
-
-        
     }
 }

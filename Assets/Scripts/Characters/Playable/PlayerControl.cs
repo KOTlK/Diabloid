@@ -7,7 +7,7 @@ namespace Game.Characters
 {
     public class PlayerControl
     {
-        private Camera _camera;
+        private readonly Camera _camera;
 
         public PlayerControl()
         {
@@ -18,48 +18,40 @@ namespace Game.Characters
         {
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                CastSpell();
+                var entity = GetEntity(Input.mousePosition);
+                Cast(new IncreaseStrength(entity.Provider, entity), entity);
             }
-        }
-
-
-        private void CastSpell()
-        {
-            bool isActive = false;
-            RaycastHit hit = GetEntity(Input.mousePosition);
-            if (hit.collider.transform.parent.TryGetComponent<Character>(out Character player))
+            if (Input.GetKeyDown(KeyCode.Mouse1))
             {
-                ContinuousSpell spell = new IncreaseStrength(player.Provider, player);
-                foreach (ContinuousSpell tempSpell in player.ActiveSpells)
-                {
-                    if(tempSpell.Name == spell.Name)
-                    {
-                        isActive = true;
-                        break;
-                    }
-                }
-                if (!isActive)
-                {
-                    player.ActiveSpells.Add(new IncreaseStrength(player.Provider, player));
-                }
+                var entity = GetEntity(Input.mousePosition);
+                Cast(new IncreaseLuck(entity.Provider, entity), entity);
+            }
+        }
 
-                Debug.Log(isActive);
+        private void Cast(Spell spell, Character entity)
+        {
+            if (entity.NoActiveSpell(spell))
+            {
+                entity.AddSpell(spell);
             }
         }
 
 
-        private RaycastHit GetEntity(Vector3 mousePosition)
+        private Character GetEntity(Vector3 mousePosition)
         {
-            RaycastHit hit;
             Ray ray = _camera.ScreenPointToRay(mousePosition);
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
             {
-                return hit;
+                if (hit.collider.transform.parent.TryGetComponent<Character>(out Character player))
+                {
+                    return player;
+                } else
+                {
+                    return null;
+                }
             }
-            return new RaycastHit();
+            return null;
         }
-
-
 
     }
 }

@@ -32,8 +32,6 @@ namespace Game.Characters
                 $"Charisma - {Provider.GetStats().Charisma}, " +
                 $"Intelegence - {Provider.GetStats().Intelegence}, " +
                 $"Luck - {Provider.GetStats().Luck}");
-
-            Debug.Log($"Health - {Health}, Armour - {Armour}, Magic - {Magic}");
         }
 
 

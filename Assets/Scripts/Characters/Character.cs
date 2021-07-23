@@ -24,6 +24,27 @@ namespace Game.Characters
             Initialize(race, specialization);
         }
 
+        public bool NoActiveSpell(Spell spell)
+        {
+            foreach (Spell tempSpell in ActiveSpells)
+            {
+                if (tempSpell.Name == spell.Name)
+                {
+                    return false;
+
+                }
+            }
+            return true;
+        }
+
+        public void AddSpell(Spell spell)
+        {
+            if (NoActiveSpell(spell))
+            {
+                ActiveSpells.Add(spell);
+            }
+        }
+
         protected void Initialize(Race race, Specialization specialization)
         {
             ActiveSpells = new List<Spell>();
@@ -57,7 +78,6 @@ namespace Game.Characters
                 if (ActiveSpells.Count == 0)
                 {
                     Provider = ClearStats;
-                    Debug.Log("There's No Active Spells");
                 }
                 foreach (ContinuousSpell spell in ActiveSpells.ToArray())
                 {

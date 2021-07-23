@@ -8,15 +8,23 @@ namespace Game.Characters.Spells
         public float Duration;
         protected Character Target;
         protected Coroutine SpellCoroutine;
+        protected CharacterStats _startStats;
+        protected CharacterStats _newStats;
 
         public ContinuousSpell(IStatsProvider wrappedEntity, Character target) : base(wrappedEntity)
         {
             Target = target;
+            _startStats = wrappedEntity.GetStats();
         }
 
         protected override CharacterStats GetStatsInternal()
         {
-            throw new System.NotImplementedException();
+            if (SpellCoroutine == null)
+            {
+                SpellCoroutine = Target.StartCoroutine(ApplySpellEffect());
+            }
+
+            return _newStats;
         }
 
         protected abstract IEnumerator ApplySpellEffect();
