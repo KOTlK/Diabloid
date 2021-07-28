@@ -1,10 +1,9 @@
 ﻿using System.Collections;
 using UnityEngine;
-using Game.Characters;
 
 namespace Game.Characters.Spells
 {
-    public class IncreaseStrength : ContinuousSpell
+    public class IncreaseStrength : TempStatsModifier
     {
         public IncreaseStrength(IStatsProvider wrappedEntity, Character character) : base(wrappedEntity, character)
         {
@@ -12,23 +11,7 @@ namespace Game.Characters.Spells
             Duration = 10f;
         }
 
-
-        protected override IEnumerator ApplySpellEffect()
-        {
-            while (Duration > 0)
-            {
-                _newStats = _startStats + IncreasedStats();
-                Duration--;
-                yield return new WaitForSeconds(1f);
-            }
-            if (SpellCoroutine != null)
-            {
-                Target.StopCoroutine(SpellCoroutine);
-            }
-
-        }
-
-        private CharacterStats IncreasedStats()
+        protected override CharacterStats IncreasedStats()
         {
             return new CharacterStats()
             {
@@ -38,10 +21,7 @@ namespace Game.Characters.Spells
                 Intelegence = 0,
                 Charisma = 0,
                 Luck = 0
-
             };
         }
-
-        
     }
 }

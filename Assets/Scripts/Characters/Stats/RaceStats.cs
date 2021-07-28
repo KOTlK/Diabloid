@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
-
-namespace Game.Characters
+﻿namespace Game.Characters
 {
     public class RaceStats : IStatsProvider
     {

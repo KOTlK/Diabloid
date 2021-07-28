@@ -2,57 +2,99 @@
 using System.Collections;
 using UnityEngine;
 using Game.Characters.Spells;
+using Game.Weapon;
 
 namespace Game.Characters
 {
-    public abstract class Character : MonoBehaviour
+    public abstract class Character : MonoBehaviour, IKillable
     {
-        public List<Spell> ActiveSpells;
         public IStatsProvider Provider;
-        protected IStatsProvider ClearStats;
-        protected Race Race;
-        protected Specialization Specialization;
-        private int _maxHealth;
-        private int _maxArmour;
-        private int _maxMagic;
+
+        public int Damage { get; protected set; }
+        public Race Race { get; protected set; }
+        public Specialization Specialization { get; protected set; }
+        public bool Dead { get; private set; } = false;
+        public Movement Mover { get; private set; }
+        public SpellActivator ActiveSpells { get; private set; }
+        public IStatsProvider ClearStats { get; private set; }
+
+        public delegate void OnCharacterDeath();
+        public event OnCharacterDeath CharacterDied;
+
         protected int Health { get; set; }
         protected int Armour { get; set; }
         protected int Magic { get; set; }
 
+        private int _maxHealth;
+        private int _maxArmour;
+        private int _maxMagic;
+
+        public void ApplyDamage(DamageType type, int amount)
+        {
+            switch (type)
+            {
+                case DamageType.Magic:
+                    if (Magic > 0)
+                    {
+                        int applyedMagic = Magic - amount;
+                        if (applyedMagic < 0)
+                        {
+                            Magic = 0;
+                            Health += applyedMagic;
+                        }
+                        else
+                        {
+                            Magic = applyedMagic;
+                        }
+                    }
+                    else
+                    {
+                        Health -= amount;
+                    }
+                    TryToDie();
+                    break;
+                case DamageType.Physical:
+                    if (Armour > 0)
+                    {
+                        int applyedDamage = Armour - amount;
+                        if (applyedDamage < 0)
+                        {
+                            Armour = 0;
+                            Health += applyedDamage;
+                        }
+                        else
+                        {
+                            Armour = applyedDamage;
+                        }
+                    }
+                    else
+                    {
+                        Health -= amount;
+                    }
+                    TryToDie();
+                    break;
+
+            }
+        }
+
+        
+
         protected Character(Race race, Specialization specialization)
         {
             Initialize(race, specialization);
+            Dead = false;
         }
 
-        public bool NoActiveSpell(Spell spell)
-        {
-            foreach (Spell tempSpell in ActiveSpells)
-            {
-                if (tempSpell.Name == spell.Name)
-                {
-                    return false;
-
-                }
-            }
-            return true;
-        }
-
-        public void AddSpell(Spell spell)
-        {
-            if (NoActiveSpell(spell))
-            {
-                ActiveSpells.Add(spell);
-            }
-        }
 
         protected void Initialize(Race race, Specialization specialization)
         {
-            ActiveSpells = new List<Spell>();
+            ActiveSpells = new SpellActivator(this);
             Race = race;
             Specialization = specialization;
             ClearStats = new RaceStats(race);
             ClearStats = new SpecializationStats(ClearStats, specialization);
             Provider = ClearStats;
+            Mover = new Movement(this);
         }
 
         protected void BaseAwake()
@@ -63,7 +105,7 @@ namespace Game.Characters
             Magic = _maxMagic;
             Health = _maxHealth;
             Armour = _maxArmour;
-            StartCoroutine(CheckActiveSpells());
+            ActiveSpells.Start();
         }
 
         private void Awake()
@@ -71,29 +113,20 @@ namespace Game.Characters
             BaseAwake();
         }
 
-        private IEnumerator CheckActiveSpells()
+        private void TryToDie()
         {
-            while (true)
+            if (Health <= 0)
             {
-                if (ActiveSpells.Count == 0)
-                {
-                    Provider = ClearStats;
-                }
-                foreach (ContinuousSpell spell in ActiveSpells.ToArray())
-                {
-                    if (spell.Duration > 0)
-                    {
-                        Provider = spell;
-                    } else
-                    {
-                        ActiveSpells.Remove(spell);
-                    }
-                }
-                Debug.Log(ActiveSpells.Count);
-                yield return new WaitForSeconds(0.2f);
+                Die();
             }
         }
 
+        private void Die()
+        {
+            CharacterDied?.Invoke();
+            Dead = true;
+            Debug.Log("DEAD");
+        }
 
     }
 }

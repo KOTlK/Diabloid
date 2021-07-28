@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Game.Characters.Spells
 {
-    public class IncreaseLuck : ContinuousSpell
+    public class IncreaseLuck : TempStatsModifier
     {
         public IncreaseLuck(IStatsProvider wrappedEntity, Character character) : base(wrappedEntity, character)
         {
@@ -12,21 +12,8 @@ namespace Game.Characters.Spells
         }
 
 
-        protected override IEnumerator ApplySpellEffect()
-        {
-            while (Duration > 0)
-            {
-                _newStats = _startStats + IncreasedStats();
-                Duration--;
-                yield return new WaitForSeconds(1f);
-            }
-            if (SpellCoroutine != null)
-            {
-                Target.StopCoroutine(SpellCoroutine);
-            }
-        }
 
-        private CharacterStats IncreasedStats()
+        protected override CharacterStats IncreasedStats()
         {
             return new CharacterStats()
             {

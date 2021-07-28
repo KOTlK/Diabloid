@@ -8,6 +8,7 @@ namespace Game.Characters
     public class PlayerControl
     {
         private readonly Camera _camera;
+        private Character _selectedEntity;
 
         public PlayerControl()
         {
@@ -18,22 +19,35 @@ namespace Game.Characters
         {
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                var entity = GetEntity(Input.mousePosition);
-                Cast(new IncreaseStrength(entity.Provider, entity), entity);
+                _selectedEntity = GetEntity(Input.mousePosition);
             }
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
-                var entity = GetEntity(Input.mousePosition);
-                Cast(new IncreaseLuck(entity.Provider, entity), entity);
+                MoveToMousePoint();
             }
         }
 
-        private void Cast(Spell spell, Character entity)
+        private void MoveToMousePoint()
         {
-            if (entity.NoActiveSpell(spell))
+            if (_selectedEntity != null)
             {
-                entity.AddSpell(spell);
+                _selectedEntity.Mover.MoveTo(GetPointOnGround(Input.mousePosition));
             }
+        }
+
+        private void CastSpell(Spell spell, Character entity)
+        {
+            entity.ActiveSpells.Add(spell);
+        }
+
+        private Vector3 GetPointOnGround(Vector3 mousePosition)
+        {
+            Ray ray = _camera.ScreenPointToRay(mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
+            {
+                return hit.point;
+            }
+            return Vector3.zero;
         }
 
 
