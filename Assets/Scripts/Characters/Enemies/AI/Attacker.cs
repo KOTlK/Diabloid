@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using UnityEngine;
 using Game.Weapon;
+using Game.Characters.AI.Utils;
 
 namespace Game.Characters.AI
 {
     public class Attacker 
     {
         private readonly Enemy _entity;
+        private readonly Translators _translator;
 
         private Coroutine _attackingRoutine;
         private Character Target => _entity.TargetLocator.GetCurrentTarget();
@@ -14,6 +16,7 @@ namespace Game.Characters.AI
         public Attacker(Enemy entity)
         {
             _entity = entity;
+            _translator = new Translators();
         }
 
         public void StartAttacking(float attackDelay)
@@ -38,7 +41,7 @@ namespace Game.Characters.AI
         {
             while (Target.Dead == false)
             {
-                Attack(Target, DamageTypeBySpecialization.GetDamageType(_entity.Specialization), _entity.Damage);
+                Attack(Target, _translator.DamageTypeBySpec.Translate(_entity.Specialization), _entity.Damage);
                 yield return new WaitForSeconds(attackDelay);
             }
 

@@ -4,6 +4,8 @@ namespace Game.Characters.AI
 {
     public abstract class Enemy : Character
     {
+        [SerializeField] protected Race _race;
+        [SerializeField] protected Specialization _spec;
         public TargetFinder TargetLocator { get; private set; }
         public Attacker Attacker { get; private set; }
 

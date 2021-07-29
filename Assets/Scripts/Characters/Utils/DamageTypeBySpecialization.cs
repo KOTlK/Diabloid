@@ -1,10 +1,10 @@
 ﻿using Game.Weapon;
 
-namespace Game.Characters.AI
+namespace Game.Characters.AI.Utils
 {
-    public class DamageTypeBySpecialization
+    public class DamageTypeBySpecialization : ITranslator<Specialization, DamageType>
     {
-        public static DamageType GetDamageType(Specialization spec) => spec switch
+        public DamageType Translate(Specialization spec) => spec switch
         {
             Specialization.Mage => DamageType.Magic,
             Specialization.Warrior => DamageType.Physical,
