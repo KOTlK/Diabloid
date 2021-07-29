@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
-
-namespace Game.Characters.AI
+﻿namespace Game.Characters.AI
 {
     public class MageBehaviour : AIBehaviour
     {

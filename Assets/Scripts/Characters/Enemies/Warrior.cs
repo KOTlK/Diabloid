@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Game.Characters.AI
 {
@@ -15,6 +14,12 @@ namespace Game.Characters.AI
             Initialize(Race.Orc, Specialization.Warrior);
             BaseAwake();
             Damage = Provider.GetStats().Strength;
+        }
+
+        private void Update()
+        {
+            _ai.Update();
+            Debug.DrawRay(transform.position, transform.right * 100);
         }
     }
 }

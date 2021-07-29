@@ -1,13 +1,13 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Game.Characters.AI
 {
     public class WarriorBehaviour : AIBehaviour
     {
-        private float _searchDelay = 1f;
-        private float _attackDistance = 2f;
-        private float _attackDelay = 1f;
+        private const float _searchDelay = 1f;
+        private const float _attackDistance = 5f;
+        private const float _attackDelay = 1f;
+        private const float _maxFollowDistance = 50f;
         public WarriorBehaviour(Enemy entity, Movement entityMover) : base(entity, entityMover)
         {
         }
@@ -32,6 +32,13 @@ namespace Game.Characters.AI
                 Entity.Attacker.StartAttacking(_attackDelay);
                 Entity.Mover.StopMoving();
             }
+
+            if (Entity.TargetLocator.GetSqrDistanceToTarget() > _maxFollowDistance * _maxFollowDistance)
+            {
+                Entity.Attacker.StopAttack();
+                Entity.Mover.StopMoving();
+            }
+
         }
     }
 }

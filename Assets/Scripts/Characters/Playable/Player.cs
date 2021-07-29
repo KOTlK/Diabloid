@@ -1,6 +1,4 @@
-﻿using Game.Weapon;
-using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Game.Characters
 {

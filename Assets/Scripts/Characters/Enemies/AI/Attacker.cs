@@ -6,9 +6,10 @@ namespace Game.Characters.AI
 {
     public class Attacker 
     {
-        private Coroutine _attackingRoutine;
-        private Character _target => _entity.TargetLocator.GetCurrentTarget();
         private readonly Enemy _entity;
+
+        private Coroutine _attackingRoutine;
+        private Character Target => _entity.TargetLocator.GetCurrentTarget();
 
         public Attacker(Enemy entity)
         {
@@ -17,7 +18,11 @@ namespace Game.Characters.AI
 
         public void StartAttacking(float attackDelay)
         {
-            _attackingRoutine = _entity.StartCoroutine(AttackCoroutine(attackDelay));
+            if (_attackingRoutine == null)
+            {
+                _attackingRoutine = _entity.StartCoroutine(AttackCoroutine(attackDelay));
+            }
+            
         }
 
         public void StopAttack()
@@ -31,9 +36,9 @@ namespace Game.Characters.AI
 
         private IEnumerator AttackCoroutine(float attackDelay)
         {
-            while (_target.Dead == false)
+            while (Target.Dead == false)
             {
-                Attack(_target, DamageTypeBySpecialization.GetDamageType(_entity.Specialization), _entity.Damage);
+                Attack(Target, DamageTypeBySpecialization.GetDamageType(_entity.Specialization), _entity.Damage);
                 yield return new WaitForSeconds(attackDelay);
             }
 

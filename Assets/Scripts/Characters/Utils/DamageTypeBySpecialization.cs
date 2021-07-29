@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
-using Game.Weapon;
+﻿using Game.Weapon;
 
 namespace Game.Characters.AI
 {

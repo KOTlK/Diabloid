@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using Game.Characters.Spells;
 using Game.Weapon;
 
@@ -9,7 +7,6 @@ namespace Game.Characters
     public abstract class Character : MonoBehaviour, IKillable
     {
         public IStatsProvider Provider;
-
         public int Damage { get; protected set; }
         public Race Race { get; protected set; }
         public Specialization Specialization { get; protected set; }

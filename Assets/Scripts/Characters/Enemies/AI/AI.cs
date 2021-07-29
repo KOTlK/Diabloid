@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
-using Game.Characters;
-
-namespace Game.Characters.AI
+﻿namespace Game.Characters.AI
 {
     public class AI
     {

@@ -1,6 +1,4 @@
-﻿using Game.Weapon;
-using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Game.Characters.AI
 {
@@ -11,7 +9,7 @@ namespace Game.Characters.AI
 
         protected AIType Type;
 
-        private AI _ai;
+        protected AI _ai;
 
 
         [SerializeField] private float _searchDistance = 3f;
